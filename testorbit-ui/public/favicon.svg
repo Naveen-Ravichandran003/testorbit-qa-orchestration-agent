@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 36" fill="none">
+  <rect width="36" height="36" rx="8" fill="#0D1B3E"/>
+  <circle cx="5"  cy="5"  r="0.6" fill="#FFFFFF" opacity="0.4"/>
+  <circle cx="30" cy="6"  r="0.5" fill="#FFFFFF" opacity="0.35"/>
+  <circle cx="32" cy="28" r="0.5" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="4"  cy="29" r="0.4" fill="#FFFFFF" opacity="0.3"/>
+  <circle cx="22" cy="3"  r="0.4" fill="#4C9AFF" opacity="0.5"/>
+  <circle cx="9"  cy="32" r="0.35" fill="#4C9AFF" opacity="0.4"/>
+  <circle cx="18" cy="18" r="15" stroke="#2684FF" stroke-width="0.8" opacity="0.25"/>
+  <circle cx="18" cy="18" r="10" stroke="#4C9AFF" stroke-width="0.8" opacity="0.2"/>
+  <circle cx="18" cy="18" r="7" fill="#0052CC"/>
+  <circle cx="18" cy="18" r="4" stroke="#FFFFFF" stroke-width="1.2" opacity="0.25"/>
+  <circle cx="18" cy="18" r="1.8" fill="#FFFFFF"/>
+  <circle cx="27.6" cy="8.4" r="2"   fill="#2684FF"/>
+  <circle cx="27.6" cy="8.4" r="0.9" fill="#FFFFFF"/>
+  <circle cx="10.5" cy="26.5" r="1.4" fill="#4C9AFF" opacity="0.7"/>
+  <line x1="18" y1="18" x2="26.5" y2="9.5" stroke="#FFFFFF" stroke-width="0.7" opacity="0.2" stroke-linecap="round"/>
+</svg>
