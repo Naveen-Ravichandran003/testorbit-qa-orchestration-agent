@@ -4,6 +4,40 @@
 
 ---
 
+## 🪐 Why "TestOrbit"?
+
+The name **TestOrbit** captures both the domain and the architecture in a single word:
+
+- **Test** = QA / Software Testing
+- **Orbit** = Everything revolves around the **User Story** in a connected, governed, traceable cycle
+
+Just like planets orbit a central star, every QA artifact in TestOrbit orbits the User Story:
+
+```
+                         ┌──── Test Cases ────┐
+                         │                    │
+                    Test Plans            Execution
+                         │                    │
+                User Story ◉ (center)    Evaluation
+                         │                    │
+                     Bug Reports ◄──── Failures
+                         │                    │
+                         └──── RAG Store ─────┘
+```
+
+| Orbit Concept | TestOrbit Equivalent |
+|---|---|
+| **Central body (Sun)** | The **Jira User Story** — everything revolves around it |
+| **Orbiting objects** | Test Cases, Test Plans, Executions, Bug Reports — all linked to the story |
+| **Gravitational pull** | The **Orchestrator** keeps all entities connected and traceable |
+| **Continuous cycle** | Generate → Execute → Evaluate → Bug → Fix → Re-test (iterative QA loop) |
+| **Governed path** | Strict governance — no orphan entities, no unlinked artifacts |
+| **Multiple satellites** | Multiple testers collaborate in real-time on the same orbit |
+
+The orchestrator is the gravity — it ensures nothing drifts away unlinked or untraceable.
+
+---
+
 ## 📌 What is TestOrbit AI?
 
 TestOrbit AI is an **AI Orchestration Agent** purpose-built for QA teams. Rather than being a standalone tool, it acts as a **central orchestrator** that connects and coordinates multiple external systems — Jira Cloud, Xray Test Management, LLM providers (Groq, xAI, Mistral), and HuggingFace embeddings — into a seamless, automated QA pipeline.
