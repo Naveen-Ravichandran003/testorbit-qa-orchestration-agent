@@ -32,14 +32,17 @@ interface StoryRow {
   coverage: "none" | "low" | "medium" | "good";
 }
 
+function isPassStatus(s: string) { return s === "Passed" || s === "Pass"; }
+function isFailStatus(s: string) { return s === "Failed" || s === "Fail"; }
+
 function buildHeatmap(testCases: any[]): StoryRow[] {
   const map: Record<string, StoryRow> = {};
   testCases.forEach(tc => {
     const sid = tc.userStoryId || "Unlinked";
     if (!map[sid]) map[sid] = { storyId: sid, total: 0, passed: 0, failed: 0, pending: 0, passRate: 0, coverage: "none" };
     map[sid].total++;
-    if (tc.status === "Passed") map[sid].passed++;
-    else if (tc.status === "Failed") map[sid].failed++;
+    if (isPassStatus(tc.status)) map[sid].passed++;
+    else if (isFailStatus(tc.status)) map[sid].failed++;
     else map[sid].pending++;
   });
   return Object.values(map).map(row => ({
@@ -92,8 +95,8 @@ const CoverageHeatmap: React.FC<{ testCases: any[] }> = ({ testCases }) => {
   const lowCount    = rows.filter(r => r.coverage === "low").length;
   const noneCount   = rows.filter(r => r.coverage === "none").length;
 
-  const totalPassed  = testCases.filter(tc => tc.status === "Passed").length;
-  const totalFailed  = testCases.filter(tc => tc.status === "Failed").length;
+  const totalPassed  = testCases.filter(tc => isPassStatus(tc.status)).length;
+  const totalFailed  = testCases.filter(tc => isFailStatus(tc.status)).length;
   const totalPending = testCases.length - totalPassed - totalFailed;
 
   const coveragePieData = [
@@ -245,8 +248,24 @@ const Dashboard: React.FC = () => {
 
   // DataStore loads on mount and polls every 15s — no extra refresh needed here
 
-  const passed  = testCases.filter(tc => tc.status === "Passed" || tc.status === "Done").length;
-  const failed   = testCases.filter(tc => tc.status === "Failed").length;
+  // Build a set of test case IDs that have at least one open linked bug
+  // (bugs created via Execution page are linked to their test case via Jira issue links)
+  const testCaseIds = new Set(testCases.map((tc: any) => tc.id));
+  const testCaseIdsWithOpenBugs = new Set<string>(
+    bugs
+      .filter((b: any) => {
+        const s = (b.status || "").toLowerCase();
+        return !["done", "closed", "resolved", "complete", "completed"].includes(s);
+      })
+      .flatMap((b: any) => (b.linkedTestCaseKeys || []).filter((k: string) => testCaseIds.has(k)))
+  );
+
+  const passed  = testCases.filter((tc: any) => tc.status === "Passed" || tc.status === "Pass" || tc.status === "Done").length;
+  // A test case is "Failed" if its status is Failed/Fail OR if an open bug is linked to it
+  const failed  = testCases.filter((tc: any) =>
+    isFailStatus(tc.status) || testCaseIdsWithOpenBugs.has(tc.id)
+  ).length;
+
   const openBugs = bugs.filter(b => {
     const s = (b.status || "").toLowerCase();
     return !["done", "closed", "resolved", "complete", "completed"].includes(s);

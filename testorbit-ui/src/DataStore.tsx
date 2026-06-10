@@ -28,7 +28,9 @@ export function getExecResults(): Record<string, { status: string; ts: number }>
 }
 export function setExecResult(id: string, status: string) {
   const results = getExecResults();
-  results[id] = { status, ts: Date.now() };
+  // Normalize "Pass" → "Passed" and "Fail" → "Failed" for dashboard consistency
+  const normalized = status === "Pass" ? "Passed" : status === "Fail" ? "Failed" : status;
+  results[id] = { status: normalized, ts: Date.now() };
   localStorage.setItem(EXEC_RESULTS_KEY, JSON.stringify(results));
 }
 

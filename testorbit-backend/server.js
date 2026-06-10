@@ -1383,16 +1383,21 @@ app.get("/jira/bugs", async (req, res) => {
     const projectKey = String(req.query.projectKey || "").replace(/[^A-Za-z0-9_]/g, "");
     if (!projectKey) return res.status(400).json({ error: "projectKey required" });
     const jql = `project = "${projectKey}" AND issuetype = Bug ORDER BY created DESC`;
-    const data = await jiraSearch(req, jql, "summary,status,priority,labels,created", 2000);
+    const data = await jiraSearch(req, jql, "summary,status,priority,labels,created,issuelinks", 2000);
     res.json((data.issues || []).map(i => ({
       id: i.key, summary: i.fields.summary, status: i.fields.status?.name,
       priority: i.fields.priority?.name, created: i.fields.created,
-      url: `${req.headers.jiraurl}/browse/${i.key}`
+      url: `${req.headers.jiraurl}/browse/${i.key}`,
+      // Collect all linked issue keys (test cases linked via "Relates" when bug was created)
+      linkedTestCaseKeys: (i.fields.issuelinks || [])
+        .map(link => link.inwardIssue?.key || link.outwardIssue?.key)
+        .filter(key => key && /^[A-Z]+-\d+$/.test(key))
     })));
   } catch (err) {
     res.status(err.response?.status || 500).json({ error: err.response?.data?.errorMessages?.[0] || err.message });
   }
 });
+
 
 // ─── GET /jira/activity ──────────────────────────────────────────────────────
 app.get("/jira/activity", async (req, res) => {
